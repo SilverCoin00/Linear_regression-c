@@ -61,16 +61,16 @@ Data_Frame* read_csv(char* file_name, int max_line_length, char* seperate) {
   	char* token;
     fgets(s, max_line_length, file);
     if (s[0] < 48 || s[0] > 57) {
-    		token = strtok(s, seperate);
-    		for (int i = 0, size; token != NULL && i < newd->col; i++) {
-      			size = strlen(token) + 1;
-      			newd->features[i] = (char*)malloc(size* sizeof(char));
-      			snprintf(newd->features[i], size, "%s", token);
-      			token = strtok(NULL, seperate);
-  		  }
-    		if (newd->features[newd->col - 1]) 
-    			  newd->features[newd->col - 1][strcspn(newd->features[newd->col - 1], "\n")] = '\0';
-  	} else rewind(file);
+		token = strtok(s, seperate);
+		for (int i = 0, size; token != NULL && i < newd->col; i++) {
+			size = strlen(token) + 1;
+			newd->features[i] = (char*)malloc(size* sizeof(char));
+			snprintf(newd->features[i], size, "%s", token);
+			token = strtok(NULL, seperate);
+		  }
+		if (newd->features[newd->col - 1]) 
+			  newd->features[newd->col - 1][strcspn(newd->features[newd->col - 1], "\n")] = '\0';
+	} else rewind(file);
   
   	float num;
   	for (int i = 0, j = 0; i < newd->row; i++, j = 0) {
