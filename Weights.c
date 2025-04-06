@@ -1,7 +1,7 @@
-#include "D:\Data\code_doc\AI_model_building\Linear_regression\Core.h"
+#include "Core.h"
 
 typedef struct Weights {
-	float* weights;
+	float* weights;    // weights and bias
 	int num_weights;
 } Weights;
 
