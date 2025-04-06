@@ -1,4 +1,4 @@
-#include "D:\Data\code_doc\AI_model_building\Linear_regression\Core.h"
+#include "Core.h"
 
 typedef struct Linear_Regression {
 	Dataset* data;
