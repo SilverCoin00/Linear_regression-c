@@ -9,10 +9,8 @@ Weights* init_weights(int num_of_features, int random_init) {
 	Weights* newb = (Weights*)malloc(sizeof(Weights));
 	newb->num_weights = num_of_features + 1;
 	newb->weights = (float*)calloc(num_of_features + 1, sizeof(float));
-	if (random_init != 0) {
-		srand(random_init);
-		for (int i = 0; i < newb->num_weights; i++) newb->weights[i] = ((float)rand() / RAND_MAX)* 0.2 - 0.1;
-	}
+	srand(random_init);
+	for (int i = 0; i < newb->num_weights; i++) newb->weights[i] = ((float)rand() / RAND_MAX)* 0.2 - 0.1;
 	return newb;
 }
 float* weights_derivative(Dataset* data, Weights* w) {             // deriv(w) = X(T).(X.w - y)
