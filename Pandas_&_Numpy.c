@@ -30,7 +30,7 @@ static int count_col(FILE* file, int max_line_length, char* seperate) {
   	}
   	int count = 1;
   	for (int i = 0; s[i] != '\n'; i++) {
-  		  if (s[i] == seperate[0]) count++;
+  		if (s[i] == seperate[0]) count++;
   	}
   	free(s);
   	rewind(file);
