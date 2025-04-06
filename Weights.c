@@ -7,7 +7,7 @@ typedef struct Weights {
 
 Weights* init_weights(int num_of_features, int random_init) {
 	Weights* newb = (Weights*)malloc(sizeof(Weights));
-	newb->num_weights = num_of_features + 1;
+	newb->num_weights = num_of_features + 1;                               // spare 1 for bias
 	newb->weights = (float*)calloc(num_of_features + 1, sizeof(float));
 	srand(random_init);
 	for (int i = 0; i < newb->num_weights; i++) newb->weights[i] = ((float)rand() / RAND_MAX)* 0.2 - 0.1;
