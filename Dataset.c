@@ -13,7 +13,7 @@ Dataset* new_dataset(float** x_train, float* y_train, int num_of_features, int n
 	for (int i = 0; i < num_of_samples; i++) {
 		newd->x[i] = (float*)malloc((num_of_features + 1)* sizeof(float));
 		for (int j = 0; j < num_of_features; j++) newd->x[i][j] = x_train[i][j];
-		newd->x[i][num_of_features] = 1;
+		newd->x[i][num_of_features] = 1;                                             // spare 1 col for bias
 	}
 	newd->y = (float*)malloc(num_of_samples* sizeof(float));
 	for (int i = 0; i < num_of_samples; i++) newd->y[i] = y_train[i];
