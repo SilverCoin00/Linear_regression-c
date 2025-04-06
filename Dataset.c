@@ -61,6 +61,13 @@ Dataset* dataset_copy(const Dataset* ds) {
 	newd->samples = ds->samples;
 	return newd;
 }
+void dataset_sample_copy(const Dataset* ds, int ds_sample_index, Dataset* copy, int copy_sample_index) {
+	if (!copy->x[copy_sample_index]) copy->x[copy_sample_index] = (float*)malloc((copy->features + 1)* sizeof(float));
+	for (int i = 0; i < ds->features && i < copy->features; i++)
+		copy->x[copy_sample_index][i] = ds->x[ds_sample_index][i];
+	copy->x[copy_sample_index][copy->features] = 1;
+	copy->y[copy_sample_index] = ds->y[ds_sample_index];
+}
 void print_dataset(Dataset* ds, int decimal, int col_space, int num_of_rows) {
 	if (!ds) return ;
 	if (num_of_rows < 0 || num_of_rows > ds->samples) num_of_rows = ds->samples;
