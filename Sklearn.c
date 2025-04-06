@@ -1,5 +1,5 @@
-#include "D:\Data\code_doc\AI_model_building\Pandas_&_Numpy.c"
-#include "D:\Data\code_doc\AI_model_building\Linear_regression\Dataset.c"
+#include "Pandas_&_Numpy.c"
+#include "Dataset.c"
 #include <math.h>
 
 typedef struct Standard_scaler {
