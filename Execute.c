@@ -1,4 +1,4 @@
-#include "D:\Data\code_doc\AI_model_building\Linear_regression\Core.h"
+#include "Core.h"
 
 int main() {
 	char file[] = "D:\\Data\\archive1\\coffee_shop_revenue.csv";
