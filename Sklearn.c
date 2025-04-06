@@ -86,3 +86,32 @@ void free_scaler(void* scaler, char* scaler_type) {
         free(scl);
     }
 }
+void train_test_split_ds(Dataset* data, Dataset* train, Dataset* test, float test_size, int random_state) {
+    train->features = data->features;
+    test->features = data->features;
+    test->samples = round(test_size* data->samples);
+    train->samples = data->samples - test->samples;
+    test->x = (float**)malloc(test->samples* sizeof(float*));
+    test->y = (float*)malloc(test->samples* sizeof(float));
+    train->x = (float**)malloc(train->samples* sizeof(float*));
+    train->y = (float*)malloc(train->samples* sizeof(float));
+
+    int* random_i = (int*)malloc(data->samples* sizeof(int)), i;
+    for (i = 0; i < data->samples; i++) random_i[i] = i;
+    srand(random_state);
+    for (int j = 0, t, a, b; j < data->samples / 2; j++) {
+        a = rand() % data->samples, b = rand() % data->samples;
+        t = random_i[a];
+        random_i[a] = random_i[b];
+        random_i[b] = t;
+    }
+    for (i = 0; i < test->samples; i++) {
+        test->x[i] = (float*)malloc((test->features + 1)* sizeof(float));
+        dataset_sample_copy(data, random_i[i], test, i);
+    }
+    for (int e = 0 ; i < data->samples; i++, e++) {
+        train->x[e] = (float*)malloc((train->features + 1)* sizeof(float));
+        dataset_sample_copy(data, random_i[i], train, e);
+    }
+    free(random_i);
+}
