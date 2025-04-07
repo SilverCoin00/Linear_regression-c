@@ -20,26 +20,20 @@ void predict(Dataset* data, Weights* w, float* y_pred) {
 void train(Linear_Regression* model, char* GD_type, int iteration, float learning_rate) {
 	float* y_pred = (float*)malloc(model->data->samples* sizeof(float));
 	float mse;
-	if (!strcmp(GD_type, "GD")) {
-		while (iteration > 0) {
-			predict(model->data, model->weights, y_pred);
-			grad_descent(model->data, model->weights, learning_rate);
-			mse = mean_square_error(y_pred, model->data->y, model->data->samples);
-			printf("Iteration left: %d, MSE = %.8f\n", iteration, mse);
-			print_weights(model->weights, 8);
-			iteration--;
-		}
-	} else if (!strcmp(GD_type, "GDM")) {
-		float* pre_velo = (float*)calloc(model->weights->num_weights, sizeof(float));
-		while (iteration > 0) {
-			predict(model->data, model->weights, y_pred);
-			grad_descent_momentum(model->data, model->weights, learning_rate, pre_velo, 0.9);
-			mse = mean_square_error(y_pred, model->data->y, model->data->samples);
-			printf("Iteration left: %d, MSE = %.8f\n", iteration, mse);
-			print_weights(model->weights, 8);
-			iteration--;
-		}
+	float* pre_velo = (float*)calloc(model->weights->num_weights, sizeof(float));
+	while (iteration > 0) {
+		predict(model->data, model->weights, y_pred);
+
+		if (!strcmp(GD_type, "GD")) grad_descent(model->data, model->weights, learning_rate);
+		else if (!strcmp(GD_type, "GDM")) grad_descent_momentum(model->data, model->weights, learning_rate, pre_velo, 0.9);
+		else if (!strcmp(GD_type, "NAG")) nesterov_accelerated_grad(model->data, model->weights, learning_rate, pre_velo, 0.9);
+		
+		mse = mean_square_error(y_pred, model->data->y, model->data->samples);
+		printf("Iteration left: %d, MSE = %.8f\n", iteration, mse);
+		print_weights(model->weights, 8);
+		iteration--;
 	}
+	free(pre_velo);
 	free(y_pred);
 }
 void free_ln_model(Linear_Regression* model) {
