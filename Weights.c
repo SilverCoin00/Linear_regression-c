@@ -34,10 +34,19 @@ float* weights_derivative(Dataset* data, Weights* w) {             // deriv(w) =
 	free(t);
 	return deriv;
 }
-void update_weights(Dataset* data, Weights* w, float learning_rate) {
+void grad_descent(Dataset* data, Weights* w, float learning_rate) {
 	float* gradient = weights_derivative(data, w);
 	for (int i = 0; i < w->num_weights; i++) w->weights[i] -= learning_rate* gradient[i];
 	free(gradient);
+}
+void grad_descent_momentum(Dataset* data, Weights* w, float learning_rate, float* pre_velocity, float velocity_rate) {
+	float* velo = weights_derivative(data, w);
+	for (int i = 0; i < w->num_weights; i++) {
+		velo[i] += velocity_rate* pre_velocity[i];
+		w->weights[i] -= learning_rate* velo[i];
+		pre_velocity[i] = velo[i];
+	}
+	free(velo);
 }
 void print_weights(Weights* w, int decimal) {
 	printf("Weights: [");
