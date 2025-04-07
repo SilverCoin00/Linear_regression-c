@@ -42,8 +42,9 @@ void grad_descent(Dataset* data, Weights* w, float learning_rate) {
 void grad_descent_momentum(Dataset* data, Weights* w, float learning_rate, float* pre_velocity, float velocity_rate) {
 	float* velo = weights_derivative(data, w);
 	for (int i = 0; i < w->num_weights; i++) {
+		velo[i] *= learning_rate;
 		velo[i] += velocity_rate* pre_velocity[i];
-		w->weights[i] -= learning_rate* velo[i];
+		w->weights[i] -= velo[i];
 		pre_velocity[i] = velo[i];
 	}
 	free(velo);
