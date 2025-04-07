@@ -63,7 +63,7 @@ Dataset* dataset_copy(const Dataset* ds) {
 }
 void dataset_sample_copy(const Dataset* ds, int ds_sample_index, Dataset* copy, int copy_sample_index) {
 	for (int i = 0; i < ds->features && i < copy->features; i++)
-	copy->x[copy_sample_index][i] = ds->x[ds_sample_index][i];
+		copy->x[copy_sample_index][i] = ds->x[ds_sample_index][i];;
 	copy->x[copy_sample_index][copy->features] = 1;
 	copy->y[copy_sample_index] = ds->y[ds_sample_index];
 }
