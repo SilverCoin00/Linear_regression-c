@@ -67,6 +67,21 @@ void dataset_sample_copy(const Dataset* ds, int ds_sample_index, Dataset* copy, 
 	copy->x[copy_sample_index][copy->features] = 1;
 	copy->y[copy_sample_index] = ds->y[ds_sample_index];
 }
+Dataset* dataset_samples_copy(const Dataset* ds, int ds_begin_index, int ds_end_index) {
+	Dataset* newd = (Dataset*)malloc(sizeof(Dataset));
+	newd->x = (float**)malloc((ds_end_index - ds_begin_index)* sizeof(float*));
+	int i, j;
+	for (i = ds_begin_index; i < ds_end_index && i < ds->samples; i++) {
+		newd->x[i - ds_begin_index] = (float*)malloc((ds->features + 1)* sizeof(float));
+		for (j = 0; j < ds->features; j++) newd->x[i - ds_begin_index][j] = ds->x[i][j];
+		newd->x[i - ds_begin_index][ds->features] = 1;
+	}
+	newd->y = (float*)malloc((ds_end_index - ds_begin_index)* sizeof(float));
+	for (i = ds_begin_index; i < ds_end_index && i < ds->samples; i++) newd->y[i - ds_begin_index] = ds->y[i];
+	newd->features = ds->features;
+	newd->samples = ds_end_index - ds_begin_index;
+	return newd;
+}
 void print_dataset(Dataset* ds, int decimal, int col_space, int num_of_rows) {
 	if (!ds) return ;
 	if (num_of_rows < 0 || num_of_rows > ds->samples) num_of_rows = ds->samples;
