@@ -34,6 +34,15 @@ float* weights_derivative(Dataset* data, Weights* w) {             // deriv(w) =
 	free(t);
 	return deriv;
 }
+void print_weights(Weights* w, int decimal) {
+	printf("Weights: [");
+	for (int i = 0; i < w->num_weights - 1; i++) printf("%.*f, ", decimal, w->weights[i]);
+	printf("%.*f]\n", decimal, w->weights[w->num_weights - 1]);
+}
+void free_weights(Weights* w) {
+	free(w->weights);
+	free(w);
+}
 void grad_descent(Dataset* data, Weights* w, float learning_rate) {
 	float* gradient = weights_derivative(data, w);
 	for (int i = 0; i < w->num_weights; i++) w->weights[i] -= learning_rate* gradient[i];
@@ -49,12 +58,19 @@ void grad_descent_momentum(Dataset* data, Weights* w, float learning_rate, float
 	}
 	free(velo);
 }
-void print_weights(Weights* w, int decimal) {
-	printf("Weights: [");
-	for (int i = 0; i < w->num_weights - 1; i++) printf("%.*f, ", decimal, w->weights[i]);
-	printf("%.*f]\n", decimal, w->weights[w->num_weights - 1]);
-}
-void free_weights(Weights* w) {
-	free(w->weights);
-	free(w);
+void nesterov_accelerated_grad(Dataset* data, Weights* w, float learning_rate, float* pre_velocity, float velocity_rate) {
+	Weights* fore_w = (Weights*)malloc(sizeof(Weights));
+	fore_w->num_weights = w->num_weights;
+	fore_w->weights = (float*)malloc(fore_w->num_weights* sizeof(float));
+	int i;
+	for (i = 0; i < w->num_weights; i++) fore_w->weights[i] = w->weights[i] - velocity_rate* pre_velocity[i];
+	float* velo = weights_derivative(data, fore_w);
+	free_weights(fore_w);
+	for (i = 0; i < w->num_weights; i++) {
+		velo[i] *= learning_rate;
+		velo[i] += velocity_rate* pre_velocity[i];
+		w->weights[i] -= velo[i];
+		pre_velocity[i] = velo[i];
+	}
+	free(velo);
 }
