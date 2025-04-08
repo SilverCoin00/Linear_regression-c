@@ -1,3 +1,4 @@
+#pragma once
 #include "Pandas_&_Numpy.c"
 #include "Dataset.c"
 #include <math.h>
