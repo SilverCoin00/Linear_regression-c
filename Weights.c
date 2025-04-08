@@ -28,7 +28,7 @@ float* weights_derivative(Dataset* data, Weights* w) {             // deriv(w) =
 	free_matrix(x_T, data->features + 1);
 	free_matrix(error, data->samples);
 	for (i = 0; i < data->features + 1; i++) {
-		deriv[i] = t[i][0];
+		deriv[i] = t[i][0] / data->samples;
 		free(t[i]);
 	}
 	free(t);
