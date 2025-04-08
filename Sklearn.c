@@ -86,6 +86,15 @@ void free_scaler(void* scaler, char* scaler_type) {
         free(scl);
     }
 }
+void shuffle_index(int* index, int size, int random_state) {
+	srand(random_state);
+	for (int j = 0, t, a, b; j < size / 2 + 1; j++) {
+		a = rand() % size, b = rand() % size;
+		t = index[a];
+		index[a] = index[b];
+		index[b] = t;
+	}
+}
 void train_test_split_ds(Dataset* data, Dataset* train, Dataset* test, float test_size, int random_state) {
     train->features = data->features;
     test->features = data->features;
@@ -98,13 +107,8 @@ void train_test_split_ds(Dataset* data, Dataset* train, Dataset* test, float tes
 
     int* random_i = (int*)malloc(data->samples* sizeof(int)), i;
     for (i = 0; i < data->samples; i++) random_i[i] = i;
-    srand(random_state);
-    for (int j = 0, t, a, b; j < data->samples / 2; j++) {
-        a = rand() % data->samples, b = rand() % data->samples;
-        t = random_i[a];
-        random_i[a] = random_i[b];
-        random_i[b] = t;
-    }
+    shuffle_index(random_i, data->samples, random_state);
+    
     for (i = 0; i < test->samples; i++) {
         test->x[i] = (float*)malloc((test->features + 1)* sizeof(float));
         dataset_sample_copy(data, random_i[i], test, i);
