@@ -82,6 +82,18 @@ Dataset* dataset_samples_copy(const Dataset* ds, int ds_begin_index, int ds_end_
 	newd->samples = ds_end_index - ds_begin_index;
 	return newd;
 }
+Dataset* dataset_samples_order_copy(const Dataset* ds, int* order, int order_begin_index, int order_end_index) {
+	Dataset* newd = (Dataset*)malloc(sizeof(Dataset));
+	newd->x = (float**)malloc((order_end_index - order_begin_index)* sizeof(float*));
+	newd->y = (float*)malloc((order_end_index - order_begin_index)* sizeof(float));
+	newd->features = ds->features;
+	newd->samples = order_end_index - order_begin_index;
+	for (int i = order_begin_index; i < order_end_index; i++) {
+		newd->x[i - order_begin_index] = (float*)malloc((ds->features + 1)* sizeof(float));
+		dataset_sample_copy(ds, order[i], newd, i - order_begin_index);
+	}
+	return newd;
+}
 void print_dataset(Dataset* ds, int decimal, int col_space, int num_of_rows) {
 	if (!ds) return ;
 	if (num_of_rows < 0 || num_of_rows > ds->samples) num_of_rows = ds->samples;
