@@ -11,7 +11,7 @@ int main() {
     Linear_Regression* model = (Linear_Regression*)malloc(sizeof(Linear_Regression));
     model->weights = init_weights(ds->features, 5);
     model->data = ds;
-    train(model, "NAG", 100, 1e-4, 32);                     // effective in 100 epochs, batch_size 32
+    train(model, "NAG", 100, 1e-4, 32);                     // best effective in 100 epochs, batch_size 32
     free_ln_model(model);
     free_scaler(scaler, "Standard_scaler");
     free_data_frame(df);
