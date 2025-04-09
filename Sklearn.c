@@ -55,23 +55,25 @@ void scaler_fit(Dataset* ds, void* scaler, char* scaler_type) {
         }
     }
 }
-void scaler_transform(Dataset* ds, void* scaler, char* scaler_type) {
+void scaler_transform(Dataset* ds, void* scaler, char* scaler_type, int is_trans_y) {
     if (!strcmp(scaler_type, "Standard_scaler")) {
         Standard_scaler* scl = (Standard_scaler*)scaler;
         int i, j;
         for (i = 0; i < ds->features; i++) {
             for (j = 0; j < ds->samples; j++) ds->x[j][i] = (ds->x[j][i] - scl->mean[i]) / scl->deviation[i];
         }
-        for (i = 0; i < ds->samples; i++) 
-            ds->y[i] = (ds->y[i] - scl->mean[scl->features - 1]) / scl->deviation[scl->features - 1];
+        if (is_trans_y)
+            for (i = 0; i < ds->samples; i++) 
+                ds->y[i] = (ds->y[i] - scl->mean[scl->features - 1]) / scl->deviation[scl->features - 1];;
     } else if (!strcmp(scaler_type, "Min_max_scaler")) {
         Min_max_scaler* scl = (Min_max_scaler*)scaler;
         int i, j;
         for (i = 0; i < ds->features; i++) {
             for (j = 0; j < ds->samples; j++) ds->x[j][i] = (ds->x[j][i] - scl->min[i]) / (scl->max[i] - scl->min[i]);
         }
-        for (i = 0; i < ds->samples; i++) 
-            ds->y[i] = (ds->y[i] - scl->min[scl->features - 1]) / (scl->max[scl->features - 1] - scl->min[scl->features - 1]);
+        if (is_trans_y)
+            for (i = 0; i < ds->samples; i++) 
+                ds->y[i] = (ds->y[i] - scl->min[scl->features - 1]) / (scl->max[scl->features - 1] - scl->min[scl->features - 1]);;
     }
 }
 void free_scaler(void* scaler, char* scaler_type) {
